@@ -1,0 +1,1368 @@
+:root {
+    --admin-dark-blue: #14213d;
+    --admin-gold: #fca311;
+    --admin-light-gray: #e5e5e5;
+    --admin-sidebar-width: 260px;
+}
+
+.admin-body {
+    margin: 0;
+    background: #f4f6f9;
+    color: var(--admin-dark-blue);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background: var(--admin-dark-blue);
+    color: var(--admin-light-gray);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 100;
+}
+
+.admin-brand {
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid rgba(252, 163, 17, 0.15);
+}
+
+.admin-brand a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--admin-light-gray);
+}
+
+.admin-brand img {
+    max-height: 36px;
+    width: auto;
+}
+
+.admin-brand span {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.admin-nav {
+    flex: 1;
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.4rem;
+    color: rgba(229, 229, 229, 0.85);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-nav-link i {
+    width: 1.125rem;
+    text-align: center;
+    color: var(--admin-gold);
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
+    background: rgba(252, 163, 17, 0.12);
+    color: #fff;
+}
+
+.admin-nav-link.active {
+    border-left: 3px solid var(--admin-gold);
+}
+
+.admin-logout-form {
+    padding: 0.75rem;
+    border-top: 1px solid rgba(252, 163, 17, 0.15);
+}
+
+.admin-logout-btn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+}
+
+.admin-main {
+    flex: 1;
+    margin-left: var(--admin-sidebar-width);
+    min-width: 0;
+}
+
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.75rem;
+    background: #fff;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.admin-page-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.admin-page-subtitle {
+    margin: 0.25rem 0 0;
+    color: rgba(20, 33, 61, 0.6);
+    font-size: 0.875rem;
+}
+
+.admin-content {
+    padding: 1.75rem;
+}
+
+.admin-alert {
+    padding: 0.875rem 1rem;
+    border-radius: 0.4rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+}
+
+.admin-alert-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.admin-alert-warning {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.admin-alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+}
+
+.admin-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(20, 33, 61, 0.06);
+}
+
+.admin-stat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background: rgba(252, 163, 17, 0.15);
+    color: var(--admin-gold);
+    font-size: 1.125rem;
+}
+
+.admin-stat-label {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: rgba(20, 33, 61, 0.6);
+}
+
+.admin-stat-value {
+    margin: 0.15rem 0 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--admin-dark-blue);
+}
+
+.admin-panel {
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(20, 33, 61, 0.06);
+    overflow: hidden;
+}
+
+.admin-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.125rem 1.25rem;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.admin-panel-header h2 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+}
+
+.admin-link {
+    color: var(--admin-gold);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.admin-link:hover {
+    text-decoration: underline;
+}
+
+.admin-count {
+    font-size: 0.875rem;
+    color: rgba(20, 33, 61, 0.6);
+}
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.875rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.06);
+    vertical-align: middle;
+}
+
+.admin-table th {
+    background: rgba(20, 33, 61, 0.03);
+    font-weight: 600;
+    color: rgba(20, 33, 61, 0.75);
+    white-space: nowrap;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(252, 163, 17, 0.04);
+}
+
+.admin-table-empty {
+    text-align: center;
+    color: rgba(20, 33, 61, 0.55);
+    padding: 2rem 1.25rem !important;
+}
+
+.admin-table-thumb {
+    width: 40px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+}
+
+.admin-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 0.25rem;
+    background: rgba(252, 163, 17, 0.15);
+    color: var(--admin-dark-blue);
+}
+
+.admin-badge-adult {
+    margin-left: 0.35rem;
+    background: rgba(178, 31, 45, 0.15);
+    color: #b21f2d;
+}
+
+.manhwa-adult-check-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-pagination {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.admin-login-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--admin-dark-blue);
+}
+
+.admin-login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.admin-login-card-wide {
+    max-width: 480px;
+}
+
+.admin-login-brand {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.admin-login-brand img {
+    max-height: 64px;
+    margin-bottom: 1rem;
+}
+
+.admin-login-brand h1 {
+    margin: 0 0 0.35rem;
+    font-size: 1.375rem;
+    color: var(--admin-dark-blue);
+}
+
+.admin-login-brand p {
+    margin: 0;
+    color: rgba(20, 33, 61, 0.6);
+    font-size: 0.875rem;
+}
+
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.admin-form-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--admin-dark-blue);
+}
+
+.admin-form-group input {
+    padding: 0.625rem 0.875rem;
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    border-radius: 0.4rem;
+    font-size: 0.9375rem;
+}
+
+.admin-form-group input:focus {
+    outline: none;
+    border-color: var(--admin-gold);
+    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.15);
+}
+
+.admin-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: rgba(20, 33, 61, 0.75);
+}
+
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 0.4rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.admin-btn-primary {
+    background: var(--admin-gold);
+    color: var(--admin-dark-blue);
+}
+
+.admin-btn-primary:hover {
+    background: #e89400;
+}
+
+.admin-btn-outline {
+    background: transparent;
+    border: 1px solid var(--admin-dark-blue);
+    color: var(--admin-dark-blue);
+}
+
+.admin-btn-outline:hover {
+    background: var(--admin-dark-blue);
+    color: var(--admin-light-gray);
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.875rem 0.35rem 0.35rem;
+    background: rgba(20, 33, 61, 0.05);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--admin-dark-blue);
+    transition: background-color 0.2s ease;
+}
+
+.admin-user:hover {
+    background: rgba(252, 163, 17, 0.15);
+    color: var(--admin-dark-blue);
+}
+
+.admin-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.admin-user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.admin-user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.admin-user-role {
+    font-size: 0.6875rem;
+    color: var(--admin-gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.admin-role-badge {
+    display: inline-block;
+    margin: 0.35rem 0 0.5rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 0.25rem;
+}
+
+.admin-role-badge-administrator {
+    background: rgba(252, 163, 17, 0.2);
+    color: var(--admin-dark-blue);
+}
+
+.admin-role-badge-editor {
+    background: rgba(20, 33, 61, 0.1);
+    color: var(--admin-dark-blue);
+}
+
+.admin-role-badge-subscriber {
+    background: rgba(100, 116, 139, 0.15);
+    color: #475569;
+}
+
+.admin-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(20, 33, 61, 0.06);
+    border-left: 4px solid var(--admin-gold);
+}
+
+.admin-profile-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--admin-gold);
+}
+
+.admin-profile-name {
+    margin: 0 0 0.25rem;
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--admin-dark-blue);
+}
+
+.admin-profile-email {
+    margin: 0 0 0.35rem;
+    color: rgba(20, 33, 61, 0.65);
+    font-size: 0.9375rem;
+}
+
+.admin-profile-bio {
+    margin: 0 0 0.35rem;
+    color: rgba(20, 33, 61, 0.75);
+    font-size: 0.875rem;
+}
+
+.admin-profile-meta {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: rgba(20, 33, 61, 0.5);
+}
+
+.admin-profile-body {
+    padding: 1.25rem;
+}
+
+.admin-profile-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.75rem 1rem 0;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.08);
+    background: rgba(20, 33, 61, 0.02);
+}
+
+.admin-profile-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.4rem 0.4rem 0 0;
+    color: rgba(20, 33, 61, 0.65);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-bottom: none;
+    margin-bottom: -1px;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-profile-tab i {
+    color: var(--admin-gold);
+    font-size: 0.875rem;
+}
+
+.admin-profile-tab:hover {
+    color: var(--admin-dark-blue);
+    background: rgba(252, 163, 17, 0.08);
+}
+
+.admin-profile-tab.active {
+    color: var(--admin-dark-blue);
+    background: #fff;
+    border-color: rgba(20, 33, 61, 0.08);
+    box-shadow: inset 0 -2px 0 var(--admin-gold);
+}
+
+.admin-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-profile-form textarea {
+    padding: 0.625rem 0.875rem;
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    border-radius: 0.4rem;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.admin-profile-form textarea:focus {
+    outline: none;
+    border-color: var(--admin-gold);
+    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.15);
+}
+
+.admin-field-error {
+    font-size: 0.8125rem;
+    color: #dc2626;
+}
+
+.admin-btn-sm {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+}
+
+.admin-filter-bar {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.admin-filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-filter-input,
+.admin-filter-select,
+.admin-form-group select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    border-radius: 0.4rem;
+    font-size: 0.875rem;
+    background: #fff;
+}
+
+.admin-filter-input {
+    min-width: 220px;
+}
+
+.admin-filter-input:focus,
+.admin-filter-select:focus,
+.admin-form-group select:focus {
+    outline: none;
+    border-color: var(--admin-gold);
+    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.15);
+}
+
+.admin-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.admin-table-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.admin-table-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.admin-table-actions form {
+    margin: 0;
+}
+
+.admin-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(20, 33, 61, 0.15);
+    border-radius: 0.35rem;
+    background: #fff;
+    color: var(--admin-dark-blue);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-action-btn:hover {
+    background: rgba(252, 163, 17, 0.15);
+    border-color: var(--admin-gold);
+    color: var(--admin-dark-blue);
+}
+
+.admin-action-btn-danger:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+}
+
+.admin-form-panel-body {
+    padding: 1.25rem;
+}
+
+.admin-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.admin-login-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    color: rgba(20, 33, 61, 0.65);
+    text-decoration: none;
+}
+
+.admin-login-back:hover {
+    color: var(--admin-gold);
+}
+
+.admin-two-factor-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+    border-radius: 0.5rem;
+    background: rgba(20, 33, 61, 0.04);
+}
+
+.admin-two-factor-status i {
+    font-size: 1.5rem;
+    color: var(--admin-gold);
+    margin-top: 0.15rem;
+}
+
+.admin-two-factor-status-enabled {
+    background: rgba(40, 167, 69, 0.08);
+}
+
+.admin-two-factor-status-enabled i {
+    color: #28a745;
+}
+
+.admin-two-factor-status p,
+.admin-two-factor-help {
+    margin: 0.35rem 0 0;
+    color: rgba(20, 33, 61, 0.65);
+    font-size: 0.875rem;
+}
+
+.admin-two-factor-setup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-two-factor-qr {
+    display: inline-flex;
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    border-radius: 0.5rem;
+    width: fit-content;
+}
+
+.admin-two-factor-secret code {
+    font-size: 0.8125rem;
+    word-break: break-all;
+}
+
+.admin-two-factor-disable-form {
+    margin-top: 1rem;
+}
+
+.admin-two-factor-reset-form {
+    margin-top: 0.75rem;
+}
+
+@media (max-width: 991.98px) {
+    .admin-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .admin-sidebar {
+        position: static;
+        width: 100%;
+    }
+
+    .admin-wrapper {
+        flex-direction: column;
+    }
+
+    .admin-main {
+        margin-left: 0;
+    }
+
+    .admin-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 0.75rem;
+    }
+
+    .admin-logout-form {
+        width: 100%;
+    }
+
+    .admin-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+}
+
+.admin-form-hint {
+    margin: 0.5rem 0 0;
+    font-size: 0.8125rem;
+    color: rgba(20, 33, 61, 0.65);
+    line-height: 1.5;
+}
+
+.admin-form-hint code {
+    font-size: 0.8125rem;
+    background: rgba(20, 33, 61, 0.06);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.2rem;
+}
+
+.admin-label-hint {
+    font-weight: 400;
+    color: rgba(20, 33, 61, 0.55);
+    font-size: 0.8125rem;
+}
+
+.admin-form-preview {
+    margin-top: 0.75rem;
+}
+
+.admin-form-preview-img {
+    max-width: 120px;
+    border-radius: 0.35rem;
+    border: 1px solid rgba(20, 33, 61, 0.12);
+}
+
+.admin-chapter-list-panel {
+    padding: 1rem 1.25rem 0;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.admin-chapter-list-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--admin-dark-blue);
+}
+
+.admin-chapter-list {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    border-radius: 0.35rem;
+}
+
+.admin-chapter-list li {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.06);
+}
+
+.admin-chapter-list li:last-child {
+    border-bottom: none;
+}
+
+.admin-chapter-list-num {
+    font-weight: 700;
+    color: var(--admin-gold);
+}
+
+.admin-chapter-list-pages {
+    color: rgba(20, 33, 61, 0.6);
+    font-size: 0.8125rem;
+}
+
+/* Manhwa edit page */
+.manhwa-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.manhwa-edit-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.manhwa-edit-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--admin-dark-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.manhwa-edit-back:hover {
+    color: var(--admin-gold);
+}
+
+.manhwa-edit-topbar-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.manhwa-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.manhwa-edit-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.manhwa-edit-sidebar {
+    position: sticky;
+    top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.manhwa-edit-cover-card {
+    position: relative;
+    background: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(20, 33, 61, 0.08);
+    border: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.manhwa-edit-cover-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4.2;
+    object-fit: cover;
+}
+
+.admin-form-section-title {
+    margin: 0 0 0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--admin-dark-blue);
+}
+
+.manhwa-genre-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.manhwa-genre-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid rgba(20, 33, 61, 0.15);
+    border-radius: 0.35rem;
+    background: #fff;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.manhwa-genre-check:has(input:checked) {
+    border-color: var(--admin-gold);
+    background: rgba(252, 163, 17, 0.12);
+}
+
+.manhwa-genre-check input {
+    accent-color: var(--admin-gold);
+}
+
+.manhwa-edit-cover-badge {
+    position: absolute;
+    top: 0.65rem;
+    left: 0.65rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--admin-gold);
+    color: var(--admin-dark-blue);
+    border-radius: 0.25rem;
+}
+
+.manhwa-edit-cover-status {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(20, 33, 61, 0.75);
+    color: #fff;
+    border-radius: 0.25rem;
+}
+
+.manhwa-edit-stats {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(20, 33, 61, 0.08);
+    overflow: hidden;
+}
+
+.manhwa-edit-stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(20, 33, 61, 0.06);
+}
+
+.manhwa-edit-stats li:last-child {
+    border-bottom: none;
+}
+
+.manhwa-edit-stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: rgba(20, 33, 61, 0.55);
+}
+
+.manhwa-edit-stats strong {
+    font-size: 0.9375rem;
+    color: var(--admin-dark-blue);
+}
+
+.manhwa-edit-slug {
+    font-size: 0.75rem;
+    word-break: break-all;
+    color: rgba(20, 33, 61, 0.8);
+    background: rgba(20, 33, 61, 0.05);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.2rem;
+}
+
+.manhwa-edit-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.manhwa-edit-card {
+    background: #fff;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(20, 33, 61, 0.08);
+    box-shadow: 0 2px 10px rgba(20, 33, 61, 0.04);
+    overflow: hidden;
+}
+
+.manhwa-edit-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem 1.25rem;
+    background: rgba(20, 33, 61, 0.02);
+    border-bottom: 1px solid rgba(20, 33, 61, 0.06);
+}
+
+.manhwa-edit-card-header > i {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.4rem;
+    background: rgba(252, 163, 17, 0.15);
+    color: var(--admin-gold);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.manhwa-edit-card-header h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--admin-dark-blue);
+}
+
+.manhwa-edit-card-header p {
+    margin: 0.25rem 0 0;
+    font-size: 0.8125rem;
+    color: rgba(20, 33, 61, 0.6);
+}
+
+.manhwa-edit-card-body {
+    padding: 1.25rem;
+}
+
+.manhwa-edit-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 1.5rem 1rem;
+    border: 2px dashed rgba(20, 33, 61, 0.18);
+    border-radius: 0.5rem;
+    background: rgba(20, 33, 61, 0.02);
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.manhwa-edit-upload:hover {
+    border-color: var(--admin-gold);
+    background: rgba(252, 163, 17, 0.06);
+}
+
+.manhwa-edit-upload > i {
+    font-size: 1.5rem;
+    color: var(--admin-gold);
+}
+
+.manhwa-edit-upload-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--admin-dark-blue);
+}
+
+.manhwa-edit-upload-hint {
+    font-size: 0.8125rem;
+    color: rgba(20, 33, 61, 0.6);
+}
+
+.manhwa-edit-upload-hint code {
+    font-size: 0.75rem;
+    background: rgba(20, 33, 61, 0.06);
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.2rem;
+}
+
+.manhwa-edit-upload-name {
+    font-size: 0.8125rem;
+    color: rgba(20, 33, 61, 0.5);
+    margin-top: 0.25rem;
+}
+
+.manhwa-edit-upload-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.manhwa-edit-zip-block {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(20, 33, 61, 0.08);
+}
+
+.manhwa-edit-zip-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    background: rgba(252, 163, 17, 0.1);
+    border-radius: 0.35rem;
+    color: rgba(20, 33, 61, 0.75);
+}
+
+.manhwa-edit-zip-warning i {
+    color: var(--admin-gold);
+    margin-top: 0.1rem;
+}
+
+.manhwa-edit-chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.manhwa-edit-chapter-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 0.35rem 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    border-radius: 0.4rem;
+    background: rgba(20, 33, 61, 0.02);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manhwa-edit-chapter-card:hover {
+    border-color: var(--admin-gold);
+    box-shadow: 0 2px 8px rgba(252, 163, 17, 0.12);
+}
+
+.manhwa-edit-chapter-thumb {
+    grid-column: 1 / -1;
+    aspect-ratio: 3 / 4;
+    border-radius: 0.3rem;
+    overflow: hidden;
+    background: rgba(20, 33, 61, 0.06);
+}
+
+.manhwa-edit-chapter-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.manhwa-edit-chapter-no-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: rgba(20, 33, 61, 0.25);
+    font-size: 1.5rem;
+}
+
+.manhwa-edit-chapter-info h3 {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--admin-dark-blue);
+}
+
+.manhwa-edit-chapter-info p {
+    margin: 0.1rem 0 0;
+    font-size: 0.75rem;
+    color: rgba(20, 33, 61, 0.55);
+}
+
+.manhwa-edit-chapter-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.3rem;
+    color: var(--admin-dark-blue);
+    background: rgba(252, 163, 17, 0.15);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.manhwa-edit-chapter-link:hover {
+    background: var(--admin-gold);
+    color: var(--admin-dark-blue);
+}
+
+.manhwa-edit-empty-chapters {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 0 1rem;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    background: rgba(20, 33, 61, 0.04);
+    color: rgba(20, 33, 61, 0.65);
+    font-size: 0.875rem;
+}
+
+.manhwa-edit-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(20, 33, 61, 0.08);
+    box-shadow: 0 -2px 12px rgba(20, 33, 61, 0.06);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+.manhwa-edit-footer .admin-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+@media (max-width: 991.98px) {
+    .manhwa-edit-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .manhwa-edit-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 1rem;
+        align-items: start;
+    }
+
+    .manhwa-edit-cover-card {
+        grid-row: span 2;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .manhwa-edit-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .manhwa-edit-chapter-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
