@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Composer\CaBundle\CaBundle;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\UploadedFile;
@@ -165,6 +166,22 @@ class PostimagesService
     {
         if (! config('postimages.verify_ssl', true)) {
             return false;
+        }
+
+        $configured = config('postimages.ca_bundle');
+
+        if (is_string($configured) && $configured !== '' && is_file($configured)) {
+            return $configured;
+        }
+
+        try {
+            $systemCa = CaBundle::getSystemCaRootBundlePath();
+
+            if ($systemCa !== '' && is_file($systemCa)) {
+                return $systemCa;
+            }
+        } catch (\Throwable) {
+            // Fall back to the bundled/downloaded CA file for local Windows setups.
         }
 
         $caBundle = $this->caCertificate->path();

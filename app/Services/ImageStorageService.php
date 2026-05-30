@@ -14,11 +14,13 @@ class ImageStorageService
 
     public function usesPostimages(): bool
     {
-        return (bool) config('postimages.enabled') && $this->postimages->isConfigured();
+        return config('postimages.enabled') && $this->postimages->isConfigured();
     }
 
     public function storeUploadedFile(UploadedFile $file, string $relativePath): string
     {
+        $this->ensurePostimagesIsReady();
+
         if ($this->usesPostimages()) {
             return $this->postimages->uploadFile($file, basename($relativePath));
         }
@@ -37,6 +39,8 @@ class ImageStorageService
 
     public function storeContents(string $contents, string $relativePath): string
     {
+        $this->ensurePostimagesIsReady();
+
         if ($this->usesPostimages()) {
             $extension = strtolower(pathinfo($relativePath, PATHINFO_EXTENSION) ?: 'jpg');
             $mimeType = match ($extension) {
@@ -95,5 +99,20 @@ class ImageStorageService
     public function isRemote(string $path): bool
     {
         return Str::startsWith($path, ['http://', 'https://']);
+    }
+
+    private function ensurePostimagesIsReady(): void
+    {
+        if (! config('postimages.enabled')) {
+            return;
+        }
+
+        if ($this->postimages->isConfigured()) {
+            return;
+        }
+
+        throw new RuntimeException(
+            'Postimages is enabled but POSTIMAGES_API_KEY is missing. Add it to your Laravel Cloud environment variables, then redeploy.'
+        );
     }
 }

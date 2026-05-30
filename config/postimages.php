@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'enabled' => env('POSTIMAGES_ENABLED', false),
+    'enabled' => filter_var(env('POSTIMAGES_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
 
     'api_key' => env('POSTIMAGES_API_KEY'),
 
@@ -36,6 +36,6 @@ return [
 
     'ca_bundle' => env('POSTIMAGES_CA_BUNDLE', storage_path('certs/cacert.pem')),
 
-    'verify_ssl' => env('POSTIMAGES_VERIFY_SSL', true),
+    'verify_ssl' => filter_var(env('POSTIMAGES_VERIFY_SSL', true), FILTER_VALIDATE_BOOLEAN),
 
 ];
