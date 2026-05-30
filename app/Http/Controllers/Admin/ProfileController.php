@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\ImageStorageService;
 use App\Services\TwoFactorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
+use RuntimeException;
 
 class ProfileController extends Controller
 {
+    public function __construct(
+        private readonly ImageStorageService $imageStorage,
+    ) {}
     public function show(Request $request, TwoFactorService $twoFactor)
     {
         $user = Auth::user();
@@ -46,11 +50,19 @@ class ProfileController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
-            }
+            try {
+                if ($user->avatar) {
+                    $this->imageStorage->delete($user->avatar);
+                }
 
-            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+                $file = $request->file('avatar');
+                $path = 'avatars/'.$user->id.'/avatar.'.$file->getClientOriginalExtension();
+                $validated['avatar'] = $this->imageStorage->storeUploadedFile($file, $path);
+            } catch (RuntimeException $exception) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['avatar' => $exception->getMessage()]);
+            }
         }
 
         $user->update([
