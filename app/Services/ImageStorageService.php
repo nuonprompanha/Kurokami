@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Support\PostimagesConfig;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -14,7 +15,7 @@ class ImageStorageService
 
     public function usesPostimages(): bool
     {
-        return config('postimages.enabled') && $this->postimages->isConfigured();
+        return PostimagesConfig::enabled() && $this->postimages->isConfigured();
     }
 
     public function storeUploadedFile(UploadedFile $file, string $relativePath): string
@@ -103,7 +104,7 @@ class ImageStorageService
 
     private function ensurePostimagesIsReady(): void
     {
-        if (! config('postimages.enabled')) {
+        if (! PostimagesConfig::enabled()) {
             return;
         }
 

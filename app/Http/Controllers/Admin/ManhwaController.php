@@ -52,11 +52,11 @@ class ManhwaController extends Controller
 
         $slug = $this->resolveUniqueSlug($validated['title']);
 
-        $coverPath = $request->file('cover_image')
-            ? $this->storeCoverImage($request->file('cover_image'), $slug)
-            : null;
-
         try {
+            $coverPath = $request->file('cover_image')
+                ? $this->storeCoverImage($request->file('cover_image'), $slug)
+                : null;
+
             $importSummary = DB::transaction(function () use ($validated, $slug, $coverPath, $request) {
                 $manhwa = Manhwa::query()->create(array_merge(
                     $this->manhwaPayload($validated),
@@ -74,9 +74,14 @@ class ManhwaController extends Controller
         } catch (RuntimeException $exception) {
             $this->imageStorage->deleteDirectory('manhwa/'.$slug);
 
+            $field = str_contains(strtolower($exception->getMessage()), 'postimages')
+                || str_contains(strtolower($exception->getMessage()), 'cover')
+                ? 'cover_image'
+                : 'chapters_zip';
+
             return back()
                 ->withInput()
-                ->withErrors(['chapters_zip' => $exception->getMessage()]);
+                ->withErrors([$field => $exception->getMessage()]);
         }
 
         return redirect()

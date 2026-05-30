@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Support\PostimagesConfig;
 use Composer\CaBundle\CaBundle;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
@@ -18,7 +19,7 @@ class PostimagesService
 
     public function isConfigured(): bool
     {
-        return filled(config('postimages.api_key'));
+        return PostimagesConfig::isConfigured();
     }
 
     public function uploadFile(UploadedFile $file, ?string $filename = null): string
@@ -42,28 +43,28 @@ class PostimagesService
         $name = pathinfo($filename, PATHINFO_FILENAME) ?: 'image';
 
         $payload = [
-            'key' => config('postimages.api_key'),
+            'key' => PostimagesConfig::apiKey(),
             'o' => '2b819584285c102318568238c7d4a4c7',
             'm' => '59c2ad4b46b0c1e12d5703302bff0120',
             'numfiles' => '1',
-            'optsize' => (string) config('postimages.optsize', '0'),
-            'expire' => (string) config('postimages.expire', '0'),
+            'optsize' => PostimagesConfig::optsize(),
+            'expire' => PostimagesConfig::expire(),
             'adult' => '0',
             'upload_session' => Str::random(32),
-            'version' => (string) config('postimages.version', '1.0.1'),
+            'version' => PostimagesConfig::version(),
             'portable' => '1',
             'name' => $name,
             'type' => $extension,
             'image' => base64_encode($contents),
         ];
 
-        if ($gallery = config('postimages.gallery')) {
+        if ($gallery = PostimagesConfig::gallery()) {
             $payload['gallery'] = $gallery;
         }
 
         $response = $this->httpClient(120)
             ->asForm()
-            ->post(config('postimages.upload_url'), $payload);
+            ->post(PostimagesConfig::uploadUrl(), $payload);
 
         if (! $response->successful()) {
             throw new RuntimeException(
@@ -164,7 +165,7 @@ class PostimagesService
 
     private function sslVerifyOption(): bool|string
     {
-        if (! config('postimages.verify_ssl', true)) {
+        if (! PostimagesConfig::verifySsl()) {
             return false;
         }
 
