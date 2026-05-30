@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Support\PostimagesConfig;
 use Composer\CaBundle\CaBundle;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
@@ -62,9 +64,20 @@ class PostimagesService
             $payload['gallery'] = $gallery;
         }
 
-        $response = $this->httpClient(120)
-            ->asForm()
-            ->post(PostimagesConfig::uploadUrl(), $payload);
+        try {
+            $response = $this->httpClient(120)
+                ->retry(3, 2000, function (\Throwable $exception): bool {
+                    return $exception instanceof ConnectionException;
+                })
+                ->asForm()
+                ->post(PostimagesConfig::uploadUrl(), $payload);
+        } catch (ConnectionException|RequestException $exception) {
+            throw new RuntimeException(
+                'Postimages upload failed: '.$exception->getMessage(),
+                0,
+                $exception
+            );
+        }
 
         if (! $response->successful()) {
             throw new RuntimeException(

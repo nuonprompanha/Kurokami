@@ -8,6 +8,7 @@ use App\Models\Manhwa;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use RuntimeException;
 use ZipArchive;
@@ -19,6 +20,28 @@ class ManhwaChapterZipImporter
     public function __construct(
         private readonly ImageStorageService $imageStorage,
     ) {}
+
+    /**
+     * @return array{chapters: int, pages: int}
+     */
+    public function importFromStoredPath(Manhwa $manhwa, string $storedPath): array
+    {
+        if (! Storage::disk('local')->exists($storedPath)) {
+            throw new RuntimeException('Chapter import zip file not found.');
+        }
+
+        $absolutePath = Storage::disk('local')->path($storedPath);
+
+        $uploadedFile = new UploadedFile(
+            $absolutePath,
+            basename($absolutePath),
+            'application/zip',
+            null,
+            true,
+        );
+
+        return $this->import($manhwa, $uploadedFile);
+    }
 
     /**
      * @return array{chapters: int, pages: int}
