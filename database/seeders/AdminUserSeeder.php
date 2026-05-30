@@ -12,31 +12,36 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()->updateOrCreate(
-            ['email' => 'soambosne@gmail.com'],
-            [
-                'name' => 'Administrator',
-                'password' => 'password',
-                'role' => User::ROLE_ADMINISTRATOR,
-            ]
+        $this->ensureStaffUser(
+            email: 'soambosne@gmail.com',
+            name: 'Administrator',
+            role: User::ROLE_ADMINISTRATOR,
         );
 
-        User::query()->updateOrCreate(
-            ['email' => 'editor@kurokami.com'],
-            [
-                'name' => 'Editor',
-                'password' => 'password',
-                'role' => User::ROLE_EDITOR,
-            ]
+        $this->ensureStaffUser(
+            email: 'editor@kurokami.com',
+            name: 'Editor',
+            role: User::ROLE_EDITOR,
         );
 
-        User::query()->updateOrCreate(
-            ['email' => 'subscriber@kurokami.com'],
-            [
-                'name' => 'Subscriber',
-                'password' => 'password',
-                'role' => User::ROLE_SUBSCRIBER,
-            ]
+        $this->ensureStaffUser(
+            email: 'subscriber@kurokami.com',
+            name: 'Subscriber',
+            role: User::ROLE_SUBSCRIBER,
         );
+    }
+
+    private function ensureStaffUser(string $email, string $name, string $role): void
+    {
+        $user = User::query()->firstOrNew(['email' => $email]);
+
+        $user->name = $name;
+        $user->role = $role;
+
+        if (! $user->exists || blank($user->password)) {
+            $user->password = 'password';
+        }
+
+        $user->save();
     }
 }
