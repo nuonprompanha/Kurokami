@@ -40,32 +40,13 @@ class ChapterPageImageProcessor
             return $contents;
         }
 
-        $targetHeight = (int) round($height * ($targetWidth / $width));
-        $resized = imagecreatetruecolor($targetWidth, $targetHeight);
+        $format = $this->detectFormat($contents);
+        $resized = $this->upscale($image, $width, $height, $targetWidth, $format);
+        imagedestroy($image);
 
-        if ($resized === false) {
-            imagedestroy($image);
-
+        if ($resized === null) {
             return $contents;
         }
-
-        $format = $this->detectFormat($contents);
-        $this->prepareCanvas($resized, $format);
-
-        imagecopyresampled(
-            $resized,
-            $image,
-            0,
-            0,
-            0,
-            0,
-            $targetWidth,
-            $targetHeight,
-            $width,
-            $height
-        );
-
-        imagedestroy($image);
 
         if (config('manhwa.chapter_page_sharpen', true)) {
             $this->sharpen($resized);
@@ -75,6 +56,78 @@ class ChapterPageImageProcessor
         imagedestroy($resized);
 
         return $encoded ?? $contents;
+    }
+
+    private function upscale(GdImage $image, int $width, int $height, int $targetWidth, string $format): ?GdImage
+    {
+        $current = $image;
+        $currentWidth = $width;
+        $currentHeight = $height;
+        $copied = false;
+
+        while ($currentWidth < $targetWidth) {
+            $nextWidth = min($targetWidth, max($currentWidth + 1, (int) round($currentWidth * 1.5)));
+            $nextHeight = (int) round($currentHeight * ($nextWidth / $currentWidth));
+            $scaled = $this->scaleStep($current, $nextWidth, $nextHeight, $format);
+
+            if ($scaled === null) {
+                if ($copied && $current !== $image) {
+                    imagedestroy($current);
+                }
+
+                return null;
+            }
+
+            if ($copied && $current !== $image) {
+                imagedestroy($current);
+            }
+
+            $current = $scaled;
+            $copied = true;
+            $currentWidth = $nextWidth;
+            $currentHeight = $nextHeight;
+        }
+
+        return $current;
+    }
+
+    private function scaleStep(GdImage $image, int $targetWidth, int $targetHeight, string $format): ?GdImage
+    {
+        if (function_exists('imagescale')) {
+            $filter = defined('IMG_BICUBIC') ? IMG_BICUBIC : IMG_BILINEAR_FIXED;
+            $scaled = @imagescale($image, $targetWidth, $targetHeight, $filter);
+
+            if ($scaled instanceof GdImage) {
+                return $scaled;
+            }
+        }
+
+        $canvas = imagecreatetruecolor($targetWidth, $targetHeight);
+
+        if ($canvas === false) {
+            return null;
+        }
+
+        $this->prepareCanvas($canvas, $format);
+
+        if (! imagecopyresampled(
+            $canvas,
+            $image,
+            0,
+            0,
+            0,
+            0,
+            $targetWidth,
+            $targetHeight,
+            imagesx($image),
+            imagesy($image)
+        )) {
+            imagedestroy($canvas);
+
+            return null;
+        }
+
+        return $canvas;
     }
 
     private function prepareCanvas(GdImage $destination, string $format): void
@@ -126,13 +179,16 @@ class ChapterPageImageProcessor
     {
         ob_start();
 
+        $jpegQuality = (int) config('manhwa.chapter_page_jpeg_quality', 95);
+        $webpQuality = (int) config('manhwa.chapter_page_webp_quality', 92);
+
         $encoded = match ($format) {
-            'png' => imagepng($image, null, 6),
+            'png' => imagepng($image, null, 4),
             'gif' => imagegif($image),
             'webp' => function_exists('imagewebp')
-                ? imagewebp($image, null, (int) config('manhwa.chapter_page_webp_quality', 90))
-                : imagejpeg($image, null, (int) config('manhwa.chapter_page_jpeg_quality', 92)),
-            default => imagejpeg($image, null, (int) config('manhwa.chapter_page_jpeg_quality', 92)),
+                ? imagewebp($image, null, $webpQuality)
+                : imagejpeg($image, null, $jpegQuality),
+            default => imagejpeg($image, null, $jpegQuality),
         };
 
         if ($encoded === false) {

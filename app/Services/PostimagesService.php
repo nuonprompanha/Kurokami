@@ -110,6 +110,10 @@ class PostimagesService
             }
         }
 
+        if (preg_match('#<page>(https://[^<]+)</page>#', $body, $pageMatch)) {
+            return $this->resolveDirectUrlFromPage($pageMatch[1]);
+        }
+
         if (preg_match('#https://i\.postimg\.cc/[^\s<"\']+#', $body, $matches)) {
             return $this->normalizeDirectUrl($matches[0]);
         }
@@ -129,15 +133,13 @@ class PostimagesService
             throw new RuntimeException('Postimages upload rejected: '.$error);
         }
 
-        foreach (['hotlink', 'thumbnail', 'page'] as $tag) {
+        if (preg_match('#<page>(https://[^<]+)</page>#', $body, $matches)) {
+            return $this->resolveDirectUrlFromPage($matches[1]);
+        }
+
+        foreach (['hotlink', 'thumbnail'] as $tag) {
             if (preg_match('#<'.$tag.'>(https://[^<]+)</'.$tag.'>#', $body, $matches)) {
-                $url = $this->normalizeDirectUrl($matches[1]);
-
-                if ($tag === 'page') {
-                    return $this->resolveDirectUrlFromPage($url);
-                }
-
-                return $url;
+                return $this->normalizeDirectUrl($matches[1]);
             }
         }
 
@@ -154,17 +156,28 @@ class PostimagesService
             throw new RuntimeException('Unable to resolve Postimages page URL.');
         }
 
-        if (preg_match('#https://i\.postimg\.cc/[^\s"\'<>]+#', $response->body(), $matches)) {
-            return $this->normalizeDirectUrl($matches[0]);
+        $body = $response->body();
+
+        if (preg_match('#https://i\.postimg\.cc/[^\s"\'<>]+\?dl=1#', $body, $matches)) {
+            return $this->normalizeDirectUrl($matches[0], preserveDownloadQuery: true);
+        }
+
+        if (preg_match_all('#https://i\.postimg\.cc/[^\s"\'<>]+#', $body, $matches)) {
+            $urls = array_values(array_unique($matches[0]));
+
+            return $this->normalizeDirectUrl(end($urls));
         }
 
         throw new RuntimeException('Unable to find direct image URL on Postimages page.');
     }
 
-    private function normalizeDirectUrl(string $url): string
+    private function normalizeDirectUrl(string $url, bool $preserveDownloadQuery = false): string
     {
         $url = html_entity_decode(trim($url));
-        $url = strtok($url, '?') ?: $url;
+
+        if (! $preserveDownloadQuery) {
+            $url = strtok($url, '?') ?: $url;
+        }
 
         return rtrim($url, '/');
     }
