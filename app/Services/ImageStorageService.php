@@ -6,11 +6,13 @@ use App\Support\PostimagesConfig;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class ImageStorageService
 {
     public function __construct(
         private readonly PostimagesService $postimages,
+        private readonly ChapterPageImageProcessor $chapterPageImages,
     ) {}
 
     public function usesPostimages(): bool
@@ -41,6 +43,10 @@ class ImageStorageService
     public function storeContents(string $contents, string $relativePath): string
     {
         $this->ensurePostimagesIsReady();
+
+        if ($this->isChapterPagePath($relativePath)) {
+            $contents = $this->chapterPageImages->process($contents);
+        }
 
         if ($this->usesPostimages()) {
             $extension = strtolower(pathinfo($relativePath, PATHINFO_EXTENSION) ?: 'jpg');
@@ -100,6 +106,11 @@ class ImageStorageService
     public function isRemote(string $path): bool
     {
         return Str::startsWith($path, ['http://', 'https://']);
+    }
+
+    private function isChapterPagePath(string $relativePath): bool
+    {
+        return str_contains(str_replace('\\', '/', $relativePath), '/chapters/');
     }
 
     private function ensurePostimagesIsReady(): void
