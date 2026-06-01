@@ -2296,8 +2296,7 @@ body.adult-gate-active {
 
 .chapter-read-page-img {
     display: block;
-    width: auto;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     pointer-events: none;
     user-select: none;
