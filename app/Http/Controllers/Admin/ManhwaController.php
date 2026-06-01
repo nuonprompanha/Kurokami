@@ -7,7 +7,6 @@ use App\Jobs\ImportManhwaChaptersJob;
 use App\Models\Genre;
 use App\Models\Manhwa;
 use App\Services\ImageStorageService;
-use App\Services\ManhwaChapterZipImporter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -18,7 +17,6 @@ use Throwable;
 class ManhwaController extends Controller
 {
     public function __construct(
-        private readonly ManhwaChapterZipImporter $zipImporter,
         private readonly ImageStorageService $imageStorage,
     ) {}
 
@@ -70,19 +68,11 @@ class ManhwaController extends Controller
 
             $manhwa->genres()->sync($validated['genre_ids'] ?? []);
 
-            if ($this->imageStorage->usesPostimages()) {
-                $this->deferChapterImport($manhwa, $request->file('chapters_zip'));
-
-                return redirect()
-                    ->route('admin.manhwas.index')
-                    ->with('success', 'Manhwa created. Cover uploaded. Chapter images are uploading to Postimages now — refresh the edit page in a few minutes.');
-            }
-
-            $importSummary = $this->importChaptersZip($manhwa, $request->file('chapters_zip'));
+            $this->deferChapterImport($manhwa, $request->file('chapters_zip'));
 
             return redirect()
                 ->route('admin.manhwas.index')
-                ->with('success', "Manhwa created with {$importSummary['chapters']} chapter(s) and {$importSummary['pages']} page(s).");
+                ->with('success', 'Manhwa created. Chapter images are importing in the background — refresh the edit page in a few minutes.');
         } catch (Throwable $exception) {
             Manhwa::query()->where('slug', $slug)->delete();
 
@@ -134,8 +124,14 @@ class ManhwaController extends Controller
         }
 
         if ($slug !== $oldSlug && ! $this->imageStorage->usesPostimages()) {
-            $this->moveManhwaStorage($oldSlug, $slug);
-            $this->refreshStoragePathsAfterSlugChange($manhwa, $oldSlug, $slug);
+            try {
+                $this->moveManhwaStorage($oldSlug, $slug);
+                $this->refreshStoragePathsAfterSlugChange($manhwa, $oldSlug, $slug);
+            } catch (Throwable $exception) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['title' => 'Could not move stored files after title change: '.$exception->getMessage()]);
+            }
         }
 
         $manhwa->update(array_merge(
@@ -152,13 +148,8 @@ class ManhwaController extends Controller
 
         if ($request->hasFile('chapters_zip')) {
             try {
-                if ($this->imageStorage->usesPostimages()) {
-                    $this->deferChapterImport($manhwa, $request->file('chapters_zip'));
-                    $message .= ' Chapter images are uploading to Postimages in the background.';
-                } else {
-                    $importSummary = $this->importChaptersZip($manhwa, $request->file('chapters_zip'));
-                    $message .= " Imported {$importSummary['chapters']} chapter(s) and {$importSummary['pages']} page(s).";
-                }
+                $this->deferChapterImport($manhwa, $request->file('chapters_zip'));
+                $message .= ' Chapter images are importing in the background — refresh this page in a few minutes.';
             } catch (Throwable $exception) {
                 return back()
                     ->withInput()
@@ -179,16 +170,6 @@ class ManhwaController extends Controller
         return redirect()
             ->route('admin.manhwas.index')
             ->with('success', 'Manhwa deleted successfully.');
-    }
-
-    /**
-     * @return array{chapters: int, pages: int}
-     */
-    private function importChaptersZip(Manhwa $manhwa, $zipFile): array
-    {
-        @set_time_limit(0);
-
-        return $this->zipImporter->import($manhwa, $zipFile);
     }
 
     private function deferChapterImport(Manhwa $manhwa, $zipFile): void

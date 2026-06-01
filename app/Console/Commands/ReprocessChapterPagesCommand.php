@@ -6,6 +6,7 @@ use App\Models\ChapterPage;
 use App\Services\ChapterPageImageProcessor;
 use App\Services\ImageStorageService;
 use App\Services\PostimagesService;
+use App\Support\ManhwaStorageConfig;
 use App\Support\PostimagesConfig;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -36,6 +37,12 @@ class ReprocessChapterPagesCommand extends Command
 
         if ($imageStorage->usesPostimages() && ! PostimagesConfig::isConfigured()) {
             $this->error('Postimages is enabled but POSTIMAGES_API_KEY is missing.');
+
+            return self::FAILURE;
+        }
+
+        if ($imageStorage->usesS3() && ! ManhwaStorageConfig::isConfigured()) {
+            $this->error('Manhwa storage is set to S3 but AWS credentials or bucket are missing.');
 
             return self::FAILURE;
         }
@@ -111,6 +118,8 @@ class ReprocessChapterPagesCommand extends Command
 
                         $newUrl = $postimages->uploadContents($processed, $filename);
                         $page->update(['path' => $newUrl]);
+                    } elseif ($imageStorage->usesS3()) {
+                        Storage::disk('s3')->put($page->path, $processed);
                     } elseif ($imageStorage->isRemote($page->path)) {
                         throw new RuntimeException('Remote chapter page path found while Postimages is disabled.');
                     } else {
@@ -148,6 +157,14 @@ class ReprocessChapterPagesCommand extends Command
             }
 
             return $contents;
+        }
+
+        if (ManhwaStorageConfig::usesS3()) {
+            if (! Storage::disk('s3')->exists($path)) {
+                throw new RuntimeException('Chapter page file not found in S3.');
+            }
+
+            return Storage::disk('s3')->get($path);
         }
 
         if (! Storage::disk('public')->exists($path)) {

@@ -94,6 +94,7 @@
             <p class="admin-form-hint">
                 Zip structure: one folder per chapter (e.g. <code>1/</code>, <code>chapter-2/</code>, <code>ch03/</code>)
                 containing ordered image files (jpg, png, webp).
+                Large archives are processed in the background after upload — refresh the edit page in a few minutes.
             </p>
             @if (isset($manhwa) && $manhwa->chapters->isNotEmpty())
                 <p class="admin-form-hint">Current: {{ $manhwa->chapters->count() }} chapter(s) with pages uploaded.</p>
@@ -103,7 +104,7 @@
 </div>
 
 <div class="admin-form-actions">
-    <button type="submit" class="admin-btn admin-btn-primary">
+    <button type="submit" class="admin-btn admin-btn-primary" id="manhwa-submit-btn">
         {{ isset($manhwa) ? 'Update Manhwa' : 'Create Manhwa' }}
     </button>
     <a href="{{ route('admin.manhwas.index') }}" class="admin-btn admin-btn-outline">Cancel</a>

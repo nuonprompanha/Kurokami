@@ -1230,3 +1230,42 @@
         }
     });
 })();
+
+(function () {
+    const pagesRoot = document.getElementById('chapter-read-pages');
+
+    if (!pagesRoot || pagesRoot.dataset.pixelPerfect !== '1') {
+        return;
+    }
+
+    function fitChapterImages() {
+        const dpr = window.devicePixelRatio || 1;
+
+        pagesRoot.querySelectorAll('.chapter-read-page-img').forEach(function (img) {
+            if (!img.naturalWidth) {
+                return;
+            }
+
+            const container = pagesRoot.clientWidth || window.innerWidth;
+            let cssWidth = Math.min(container, img.naturalWidth);
+
+            if (cssWidth * dpr > img.naturalWidth) {
+                cssWidth = img.naturalWidth / dpr;
+            }
+
+            img.style.width = Math.min(cssWidth, container) + 'px';
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+        });
+    }
+
+    pagesRoot.querySelectorAll('.chapter-read-page-img').forEach(function (img) {
+        if (img.complete) {
+            fitChapterImages();
+        } else {
+            img.addEventListener('load', fitChapterImages, { once: true });
+        }
+    });
+
+    window.addEventListener('resize', fitChapterImages);
+})();

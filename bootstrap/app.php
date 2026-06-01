@@ -43,4 +43,16 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+        $exceptions->render(function (\Illuminate\Http\Exceptions\PostTooLargeException $exception, Request $request) {
+            $limit = ini_get('post_max_size') ?: 'unknown';
+            $message = "Upload too large for PHP (post_max_size is {$limit}). "
+                .'Restart the server with: composer serve - or increase post_max_size and upload_max_filesize in php.ini.';
+
+            if ($request->is('admin/*')) {
+                return redirect()->back()->withInput()->withErrors(['chapters_zip' => $message]);
+            }
+
+            return redirect()->back()->withInput()->withErrors(['upload' => $message]);
+        });
     })->create();

@@ -43,6 +43,16 @@
             titleInput.addEventListener('input', function () {
                 slugPreview.textContent = slugify(this.value);
             });
+
+            const form = document.querySelector('.manhwa-create-form');
+            const submitBtn = document.getElementById('manhwa-submit-btn');
+
+            if (form && submitBtn) {
+                form.addEventListener('submit', function () {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Uploading...';
+                });
+            }
         })();
     </script>
 @endsection

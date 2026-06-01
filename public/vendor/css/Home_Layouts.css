@@ -2277,7 +2277,7 @@ body.adult-gate-active {
     flex-direction: column;
     align-items: center;
     gap: 0;
-    max-width: 900px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -2296,10 +2296,11 @@ body.adult-gate-active {
 
 .chapter-read-page-img {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: min(100%, var(--chapter-reader-max-width, 100%));
     height: auto;
+    margin: 0 auto;
     image-rendering: auto;
-    image-rendering: -webkit-optimize-contrast;
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;

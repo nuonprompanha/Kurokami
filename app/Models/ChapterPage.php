@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ManhwaStorageConfig;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
@@ -25,6 +26,6 @@ class ChapterPage extends Model
             return $this->path;
         }
 
-        return '/storage/'.ltrim(str_replace('\\', '/', $this->path), '/');
+        return ManhwaStorageConfig::publicUrl($this->path);
     }
 }

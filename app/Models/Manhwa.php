@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ManhwaStorageConfig;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -125,7 +126,7 @@ class Manhwa extends Model
             return $this->cover_image;
         }
 
-        return '/storage/'.ltrim(str_replace('\\', '/', $this->cover_image), '/');
+        return ManhwaStorageConfig::publicUrl($this->cover_image);
     }
 
     public function storageDirectory(): string

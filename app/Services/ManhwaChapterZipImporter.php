@@ -97,10 +97,15 @@ class ManhwaChapterZipImporter
                     $extension = strtolower(pathinfo($sourcePath, PATHINFO_EXTENSION));
                     $filename = str_pad((string) ($index + 1), 3, '0', STR_PAD_LEFT).'.'.$extension;
                     $destination = $chapterPath.'/'.$filename;
-                    $storedPath = $this->imageStorage->storeContents(
-                        file_get_contents($sourcePath),
-                        $destination
-                    );
+
+                    if ($this->imageStorage->preservesOriginalChapterPages()) {
+                        $storedPath = $this->imageStorage->storeFileFromPath($sourcePath, $destination);
+                    } else {
+                        $storedPath = $this->imageStorage->storeContents(
+                            file_get_contents($sourcePath),
+                            $destination
+                        );
+                    }
 
                     ChapterPage::query()->create([
                         'chapter_id' => $chapter->id,

@@ -13,6 +13,10 @@ class ChapterPageImageProcessor
 
     public function process(string $contents): string
     {
+        if (! config('manhwa.chapter_page_upscale', false)) {
+            return $contents;
+        }
+
         if (! extension_loaded('gd')) {
             return $contents;
         }
@@ -179,11 +183,12 @@ class ChapterPageImageProcessor
     {
         ob_start();
 
-        $jpegQuality = (int) config('manhwa.chapter_page_jpeg_quality', 95);
-        $webpQuality = (int) config('manhwa.chapter_page_webp_quality', 92);
+        $jpegQuality = (int) config('manhwa.chapter_page_jpeg_quality', 98);
+        $webpQuality = (int) config('manhwa.chapter_page_webp_quality', 95);
+        $pngCompression = max(0, min(9, (int) config('manhwa.chapter_page_png_compression', 0)));
 
         $encoded = match ($format) {
-            'png' => imagepng($image, null, 4),
+            'png' => imagepng($image, null, $pngCompression),
             'gif' => imagegif($image),
             'webp' => function_exists('imagewebp')
                 ? imagewebp($image, null, $webpQuality)

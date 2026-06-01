@@ -209,21 +209,15 @@
                                                 >
                                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                                 </a>
-                                                <form
-                                                    action="{{ route('admin.manhwas.chapters.destroy', ['manhwa' => $manhwa, 'chapterNumber' => $chapter->chapter_number]) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Delete {{ $chapter->displayTitle() }} and all its pages?')"
+                                                <button
+                                                    type="submit"
+                                                    form="delete-chapter-{{ $chapter->id }}"
+                                                    class="manhwa-edit-chapter-delete"
+                                                    title="Delete chapter"
+                                                    onclick="return confirm('Delete {{ $chapter->displayTitle() }} and all its pages?')"
                                                 >
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button
-                                                        type="submit"
-                                                        class="manhwa-edit-chapter-delete"
-                                                        title="Delete chapter"
-                                                    >
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </button>
-                                                </form>
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
                                             </div>
                                         </article>
                                     @endforeach
@@ -258,6 +252,9 @@
                                         Uploading a new ZIP will replace pages for chapters included in the archive.
                                     </p>
                                 @endif
+                                <p class="admin-form-hint">
+                                    Large ZIP files are processed in the background after upload — refresh this page in a few minutes to see new chapters.
+                                </p>
                             </div>
                         </div>
                     </section>
@@ -265,12 +262,24 @@
             </div>
 
             <div class="manhwa-edit-footer">
-                <button type="submit" class="admin-btn admin-btn-primary">
+                <button type="submit" class="admin-btn admin-btn-primary" id="manhwa-submit-btn">
                     <i class="fa-solid fa-floppy-disk"></i> Save changes
                 </button>
                 <a href="{{ route('admin.manhwas.index') }}" class="admin-btn admin-btn-outline">Cancel</a>
             </div>
         </form>
+
+        @foreach ($manhwa->chapters as $chapter)
+            <form
+                id="delete-chapter-{{ $chapter->id }}"
+                action="{{ route('admin.manhwas.chapters.destroy', ['manhwa' => $manhwa, 'chapterNumber' => $chapter->chapter_number]) }}"
+                method="POST"
+                hidden
+            >
+                @csrf
+                @method('DELETE')
+            </form>
+        @endforeach
     </div>
 
     <script>
@@ -319,6 +328,16 @@
                 zipInput.addEventListener('change', function () {
                     const file = this.files[0];
                     zipFileName.textContent = file ? file.name : 'No file selected';
+                });
+            }
+
+            const form = document.querySelector('.manhwa-edit-form');
+            const submitBtn = document.getElementById('manhwa-submit-btn');
+
+            if (form && submitBtn) {
+                form.addEventListener('submit', function () {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
                 });
             }
         })();

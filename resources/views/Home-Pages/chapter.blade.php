@@ -44,14 +44,19 @@
 
             @include('Home-Pages.partials.chapter-nav')
 
-            <div class="chapter-read-pages" id="chapter-read-pages">
+            <div
+                class="chapter-read-pages"
+                id="chapter-read-pages"
+                data-pixel-perfect="{{ config('manhwa.chapter_reader_pixel_perfect', true) ? '1' : '0' }}"
+            >
                 @forelse ($chapter->pages as $page)
                     <div class="chapter-read-page-wrap">
                         <img
                             src="{{ $page->url() }}"
                             alt="{{ $manhwa->title }} — Ch. {{ $chapter->chapter_number }} — Page {{ $page->sort_order }}"
                             class="chapter-read-page-img"
-                            loading="lazy"
+                            loading="{{ $loop->first ? 'eager' : 'lazy' }}"
+                            decoding="async"
                             draggable="false"
                         >
                         <div class="chapter-read-page-shield" aria-hidden="true"></div>
