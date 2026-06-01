@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Admin\Auth\TwoFactorSetupController;
+use App\Http\Controllers\Admin\ChapterController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GenreController;
 use App\Http\Controllers\Admin\ManhwaController;
@@ -35,6 +36,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
             Route::resource('manhwas', ManhwaController::class)->except(['show']);
+            Route::delete('manhwas/{manhwa}/chapters/{chapterNumber}', [ChapterController::class, 'destroy'])
+                ->where('chapterNumber', '[0-9]+')
+                ->name('manhwas.chapters.destroy');
             Route::resource('genres', GenreController::class)->except(['show']);
 
             Route::middleware('administrator')->group(function () {

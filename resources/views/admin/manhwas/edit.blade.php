@@ -198,15 +198,33 @@
                                             </div>
                                             <div class="manhwa-edit-chapter-info">
                                                 <h3>{{ $chapter->displayTitle() }}</h3>
+                                                <p>{{ $chapter->pages_count }} page(s)</p>
                                             </div>
-                                            <a
-                                                href="{{ route('chapter.show', ['manhwa' => $manhwa->slug, 'chapterNumber' => $chapter->chapter_number]) }}"
-                                                class="manhwa-edit-chapter-link"
-                                                target="_blank"
-                                                title="Preview chapter"
-                                            >
-                                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                            </a>
+                                            <div class="manhwa-edit-chapter-actions">
+                                                <a
+                                                    href="{{ route('chapter.show', ['manhwa' => $manhwa->slug, 'chapterNumber' => $chapter->chapter_number]) }}"
+                                                    class="manhwa-edit-chapter-link"
+                                                    target="_blank"
+                                                    title="Preview chapter"
+                                                >
+                                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                                </a>
+                                                <form
+                                                    action="{{ route('admin.manhwas.chapters.destroy', ['manhwa' => $manhwa, 'chapterNumber' => $chapter->chapter_number]) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Delete {{ $chapter->displayTitle() }} and all its pages?')"
+                                                >
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button
+                                                        type="submit"
+                                                        class="manhwa-edit-chapter-delete"
+                                                        title="Delete chapter"
+                                                    >
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </article>
                                     @endforeach
                                 </div>

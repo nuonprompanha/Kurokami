@@ -1272,6 +1272,33 @@
     color: var(--admin-dark-blue);
 }
 
+.manhwa-edit-chapter-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.35rem;
+}
+
+.manhwa-edit-chapter-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: none;
+    border-radius: 0.3rem;
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.12);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.manhwa-edit-chapter-delete:hover {
+    background: #c0392b;
+    color: #fff;
+}
+
 .manhwa-edit-chapter-info p {
     margin: 0.1rem 0 0;
     font-size: 0.75rem;
