@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use RuntimeException;
 
 class AdminUserSeeder extends Seeder
 {
@@ -12,36 +13,24 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->ensureStaffUser(
-            email: 'soambosne@gmail.com',
-            name: 'Administrator',
-            role: User::ROLE_ADMINISTRATOR,
-        );
+        $email = env('ADMIN_EMAIL', 'soambosne@gmail.com');
+        $name = env('ADMIN_NAME', 'Administrator');
+        $password = env('ADMIN_PASSWORD');
 
-        $this->ensureStaffUser(
-            email: 'editor@kurokami.com',
-            name: 'Editor',
-            role: User::ROLE_EDITOR,
-        );
-
-        $this->ensureStaffUser(
-            email: 'subscriber@kurokami.com',
-            name: 'Subscriber',
-            role: User::ROLE_SUBSCRIBER,
-        );
-    }
-
-    private function ensureStaffUser(string $email, string $name, string $role): void
-    {
-        $user = User::query()->firstOrNew(['email' => $email]);
-
-        $user->name = $name;
-        $user->role = $role;
-
-        if (! $user->exists || blank($user->password)) {
-            $user->password = 'password';
+        if (blank($password)) {
+            throw new RuntimeException(
+                'ADMIN_PASSWORD is required. Set it in Laravel Cloud environment variables before running AdminUserSeeder.'
+            );
         }
 
-        $user->save();
+        User::query()->updateOrCreate(
+            ['email' => $email],
+            [
+                'name' => $name,
+                'password' => $password,
+                'role' => User::ROLE_ADMINISTRATOR,
+                'email_verified_at' => now(),
+            ],
+        );
     }
 }
