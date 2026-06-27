@@ -7,7 +7,7 @@
     <title>@yield('title') - Kurokami Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{ asset('vendor/css/Admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/css/Admin.css') }}?v={{ filemtime(public_path('vendor/css/Admin.css')) }}">
 </head>
 
 <body class="admin-body">
@@ -26,6 +26,10 @@
                         <a href="{{ route('admin.dashboard') }}" @class(['admin-nav-link', 'active' => request()->routeIs('admin.dashboard')])>
                             <i class="fa-solid fa-gauge-high"></i>
                             Dashboard
+                        </a>
+                        <a href="{{ route('admin.visitors.index') }}" @class(['admin-nav-link', 'active' => request()->routeIs('admin.visitors.*')])>
+                            <i class="fa-solid fa-chart-line"></i>
+                            Visitors
                         </a>
                     @endif
                     <a href="{{ route('admin.manhwas.index') }}" @class(['admin-nav-link', 'active' => request()->routeIs('admin.manhwas.*')])>

@@ -11,6 +11,26 @@
     <link rel="stylesheet" href="{{ asset('vendor/css/Home_Layouts.css') }}?v={{ filemtime(public_path('vendor/css/Home_Layouts.css')) }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TBKPTCLN1C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TBKPTCLN1C');
+</script>
+
+    @if (config('services.google_analytics.measurement_id'))
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ urlencode(config('services.google_analytics.measurement_id')) }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', @json(config('services.google_analytics.measurement_id')));
+        </script>
+    @endif
 </head>
 
 <body class="is-loading" style="--chapter-reader-max-width: {{ max(0, (int) config('manhwa.chapter_reader_max_width', 0)) > 0 ? max(0, (int) config('manhwa.chapter_reader_max_width', 0)).'px' : '100%' }};">

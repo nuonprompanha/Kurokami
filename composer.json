@@ -9,6 +9,7 @@
         "php": "^8.3",
         "bacon/bacon-qr-code": "^3.1",
         "composer/ca-bundle": "^1.5",
+        "google/analytics-data": "0.24",
         "laravel/framework": "^13.8",
         "laravel/socialite": "^5.27",
         "laravel/tinker": "^3.0",

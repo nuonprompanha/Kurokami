@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\GenreController;
 use App\Http\Controllers\Admin\ManhwaController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VisitorAnalyticsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -43,6 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
             Route::middleware('administrator')->group(function () {
                 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+                Route::get('visitors', VisitorAnalyticsController::class)->name('visitors.index');
                 Route::resource('users', UserController::class)->except(['show']);
             });
         });
